@@ -6,7 +6,7 @@
 #include "xgi/framework/UIManager.h"
 #include "hyperdaq/framework/Layout.h"
 
-
+#include "toolbox/BSem.h"
 
 
 
@@ -15,17 +15,18 @@ class ApplicationStub;
 }
 
 
-class ALayout: public hyperdaq::framework::Layout
-{
-    public:
-      ALayout();
-      virtual ~ALayout();
+class ALayout: public hyperdaq::framework::Layout {
+  public:
+    ALayout( xdaq::Application* app );
+    virtual ~ALayout();
 
-      // NOTE: This method needs the throw specifier, since the parent
-      // class already has it.
-      virtual void getHTMLHeader(xgi::framework::UIManager* manager,
-                                 xgi::Input* in,
-                                 xgi::Output* out) throw (xgi::exception::Exception);
+    // NOTE: This method needs the throw specifier, since the parent
+    // class already has it.
+    virtual void getHTMLHeader(xgi::framework::UIManager* manager,
+                               xgi::Input* in,
+                               xgi::Output* out) throw (xgi::exception::Exception);
+  private:
+    std::string callback_;
 };
 
 class SimpleClient : 
@@ -49,7 +50,8 @@ class SimpleClient :
         void updateData(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
 
 private:
-  
+  toolbox::BSem lock_;
+
   ALayout layout_;
   
   int counter_;
