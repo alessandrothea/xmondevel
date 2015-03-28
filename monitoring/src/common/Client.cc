@@ -32,8 +32,6 @@ ALayout::getHTMLHeader(xgi::framework::UIManager* manager, xgi::Input* in, xgi::
 
 
 
-
-
 XDAQ_INSTANTIATOR_IMPL(SimpleClient)
 
 SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) :
@@ -42,8 +40,10 @@ SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) :
   
   xgi::framework::deferredbind(this, this,  &SimpleClient::Default, "Default");
   //xgi::framework::deferredbind(this, this,  &SimpleClient::getConsoleData, "getConsoleData");
-   xgi::bind(this, &SimpleClient::getConsoleData, "getConsoleData");
   
+   xgi::bind(this, &SimpleClient::getConsoleData, "getConsoleData");
+   xgi::bind(this, &SimpleClient::getConsoleData, "updateData");
+
   setLayout(&layout_);
   
   toolbox::task::Timer * timer =
@@ -99,4 +99,8 @@ SimpleClient::Default(xgi::Input* in, xgi::Output* out) throw (xgi::exception::E
 void SimpleClient::getConsoleData(xgi::Input*, xgi::Output* out) throw (xgi::exception::Exception) {
   out->getHTTPResponseHeader().addHeader("Content-Type", "text/plain");
   *out << "Counter : " << counter_;
+}
+
+void SimpleClient::updateData(xgi::Input*, xgi::Output* out) throw (xgi::exception::Exception) {
+  *out << "{ \"counter\": " << counter_ << " }";
 }

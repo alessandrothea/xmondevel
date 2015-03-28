@@ -44,7 +44,10 @@ class SimpleClient :
         void timeExpired(toolbox::task::TimerEvent& event);
   
         void Default(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
+        
         void getConsoleData(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
+        void updateData(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
+
 private:
   
   ALayout layout_;
