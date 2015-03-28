@@ -4,14 +4,29 @@
 #include "xdaq/Application.h"
 #include "toolbox/task/TimerListener.h"
 #include "xgi/framework/UIManager.h"
+#include "hyperdaq/framework/Layout.h"
 
-#include "log4cplus/logger.h"
-#include "log4cplus/loggingmacros.h"
+
+
 
 
 namespace xdaq {
 class ApplicationStub;
 }
+
+
+class ALayout: public hyperdaq::framework::Layout
+{
+    public:
+      ALayout();
+      virtual ~ALayout();
+
+      // NOTE: This method needs the throw specifier, since the parent
+      // class already has it.
+      virtual void getHTMLHeader(xgi::framework::UIManager* manager,
+                                 xgi::Input* in,
+                                 xgi::Output* out) throw (xgi::exception::Exception);
+};
 
 class SimpleClient : 
     public xdaq::Application,
@@ -31,6 +46,9 @@ class SimpleClient :
         void Default(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
         void getConsoleData(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
 private:
+  
+  ALayout layout_;
+  
   int counter_;
 };
 

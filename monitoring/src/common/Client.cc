@@ -10,6 +10,30 @@
 #include "xgi/Method.h"
 #include "xgi/framework/Method.h"
 
+#include "log4cplus/logger.h"
+#include "log4cplus/loggingmacros.h"
+
+ALayout::ALayout() {
+
+}
+
+ALayout::~ALayout() {
+
+}
+
+void
+ALayout::getHTMLHeader(xgi::framework::UIManager* manager, xgi::Input* in, xgi::Output* out) throw (xgi::exception::Exception) {
+
+  // Get the 'default' HyperDAQ layout.
+  hyperdaq::framework::Layout::getHTMLHeader(manager, in, out);
+
+  // See tcds/utils/Layout.cc
+}
+
+
+
+
+
 XDAQ_INSTANTIATOR_IMPL(SimpleClient)
 
 SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) :
@@ -19,6 +43,8 @@ SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) :
   xgi::framework::deferredbind(this, this,  &SimpleClient::Default, "Default");
   //xgi::framework::deferredbind(this, this,  &SimpleClient::getConsoleData, "getConsoleData");
    xgi::bind(this, &SimpleClient::getConsoleData, "getConsoleData");
+  
+  setLayout(&layout_);
   
   toolbox::task::Timer * timer =
   toolbox::task::getTimerFactory()->createTimer("PeriodicTime");
