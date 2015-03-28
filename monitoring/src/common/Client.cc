@@ -61,5 +61,12 @@ SimpleClient::Default(xgi::Input* in, xgi::Output* out) throw (xgi::exception::E
       "</table>";
   
   *out << counter_;
+
+  std::stringstream callback;
+    callback << this->getApplicationDescriptor()->getContextDescriptor()->getURL();
+    callback << "/" << this->getApplicationDescriptor()->getURN() << "/getConsoleData";
+
+    *out << "<div id=\"my-console\" class=\"xdaq-console\" data-callback=\"" << callback.str() << "\" autosize></div>" << std::endl;
+
 }
 
