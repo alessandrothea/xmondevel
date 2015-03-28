@@ -29,6 +29,8 @@ class SimpleClient :
         void timeExpired(toolbox::task::TimerEvent& event);
   
         void Default(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
+private:
+  int counter_;
 };
 
 #endif

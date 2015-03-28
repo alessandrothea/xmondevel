@@ -12,13 +12,15 @@
 
 XDAQ_INSTANTIATOR_IMPL(SimpleClient)
 
-SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) : xdaq::Application(stub), xgi::framework::UIManager(this) {
+SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) :
+  xdaq::Application(stub),
+  xgi::framework::UIManager(this), counter_(0x0) {
   
   xgi::framework::deferredbind(this, this,  &SimpleClient::Default, "Default");
   
   toolbox::task::Timer * timer =
-  toolbox::task::getTimerFactory()->createTimer("PeriodicDiagnostic");
-  toolbox::TimeInterval interval(8,0); // period of 8 secs 
+  toolbox::task::getTimerFactory()->createTimer("PeriodicTime");
+  toolbox::TimeInterval interval(5,0); // period of 8 secs 
   toolbox::TimeVal start;
   start = toolbox::TimeVal::gettimeofday();
   timer->scheduleAtFixedRate( start, this, interval,  0, "" );	
@@ -32,6 +34,7 @@ SimpleClient::~SimpleClient() {
 void
 SimpleClient::timeExpired(toolbox::task::TimerEvent& event) {
   LOG4CPLUS_INFO (this->getApplicationLogger(), "now!" );
+  ++counter_;
 }
 
 void
@@ -56,5 +59,7 @@ SimpleClient::Default(xgi::Input* in, xgi::Output* out) throw (xgi::exception::E
       "      </tr>"
       "</tbody>"
       "</table>";
+  
+  *out << counter_;
 }
 
