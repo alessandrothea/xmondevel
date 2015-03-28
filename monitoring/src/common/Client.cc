@@ -17,6 +17,7 @@ SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) :
   xgi::framework::UIManager(this), counter_(0x0) {
   
   xgi::framework::deferredbind(this, this,  &SimpleClient::Default, "Default");
+  xgi::framework::deferredbind(this, this,  &SimpleClient::getConsoleData, "getConsoleData");
   
   toolbox::task::Timer * timer =
   toolbox::task::getTimerFactory()->createTimer("PeriodicTime");
@@ -70,3 +71,6 @@ SimpleClient::Default(xgi::Input* in, xgi::Output* out) throw (xgi::exception::E
 
 }
 
+void SimpleClient::getConsoleData(xgi::Input*, xgi::Output* out) throw (xgi::exception::Exception) {
+  *out << "Counter : " << counter_;
+}
