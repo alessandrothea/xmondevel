@@ -17,7 +17,8 @@ SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) :
   xgi::framework::UIManager(this), counter_(0x0) {
   
   xgi::framework::deferredbind(this, this,  &SimpleClient::Default, "Default");
-  xgi::framework::deferredbind(this, this,  &SimpleClient::getConsoleData, "getConsoleData");
+  //xgi::framework::deferredbind(this, this,  &SimpleClient::getConsoleData, "getConsoleData");
+   xgi::bind(this, &SimpleClient::getConsoleData, "getConsoleData");
   
   toolbox::task::Timer * timer =
   toolbox::task::getTimerFactory()->createTimer("PeriodicTime");
@@ -61,8 +62,6 @@ SimpleClient::Default(xgi::Input* in, xgi::Output* out) throw (xgi::exception::E
       "</tbody>"
       "</table>";
   
-  *out << counter_;
-
   std::stringstream callback;
     callback << this->getApplicationDescriptor()->getContextDescriptor()->getURL();
     callback << "/" << this->getApplicationDescriptor()->getURN() << "/getConsoleData";
@@ -72,5 +71,6 @@ SimpleClient::Default(xgi::Input* in, xgi::Output* out) throw (xgi::exception::E
 }
 
 void SimpleClient::getConsoleData(xgi::Input*, xgi::Output* out) throw (xgi::exception::Exception) {
+  out->getHTTPResponseHeader().addHeader("Content-Type", "text/plain");
   *out << "Counter : " << counter_;
 }
