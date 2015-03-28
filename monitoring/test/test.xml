@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<xc:Partition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xc="http://xdaq.web.cern.ch/xdaq/xsd/2004/XMLConfiguration-30">
+
+  <!-- Declare a context that contain applcation -->
+  <xc:Context url="http://localhost:1972">
+        
+    <!-- Declare a HelloWorld application -->
+    <xc:Application class="SimpleClient" id="254" instance="0" network="local"/>
+        
+    <!-- Shared object library that contains the HelloWorld inplementation -->      
+    <xc:Module>${HOME}/Development/xdaqtest/xdevel/monitoring/lib/linux/x86_slc4/libmonitoring.so</xc:Module>
+
+  </xc:Context>
+
+</xc:Partition>

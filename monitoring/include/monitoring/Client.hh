@@ -14,6 +14,9 @@ class SimpleClient :
     public xdaq::Application,
     public xgi::framework::UIManager {
         public:
+          
+        XDAQ_INSTANTIATOR();
+
         SimpleClient( xdaq::ApplicationStub* );
         virtual ~SimpleClient();
 
