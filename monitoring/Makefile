@@ -7,7 +7,8 @@ Project=xdevel
 Package=monitoring
 
 Sources=\
-	Client.cc 
+	Client.cc \
+	LASConnector.cc
 
 IncludeDirs = \
 	include\

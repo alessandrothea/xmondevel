@@ -115,6 +115,7 @@ XDAQ_INSTANTIATOR_IMPL(SimpleClient)
 SimpleClient::SimpleClient( xdaq::ApplicationStub *stub ) :
   xdaq::Application(stub),
   xgi::framework::UIManager(this),
+  lock_ (toolbox::BSem::FULL),
   layout_(this),
   counter_(0x0) {
   
