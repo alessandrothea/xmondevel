@@ -5,14 +5,18 @@
 #include "toolbox/task/TimerListener.h"
 #include "xgi/framework/UIManager.h"
 
+#include "log4cplus/logger.h"
+#include "log4cplus/loggingmacros.h"
+
+
 namespace xdaq {
 class ApplicationStub;
 }
 
 class SimpleClient : 
-    public toolbox::task::TimerListener,
     public xdaq::Application,
-    public xgi::framework::UIManager {
+    public xgi::framework::UIManager,
+    public toolbox::task::TimerListener {
         public:
           
         XDAQ_INSTANTIATOR();
