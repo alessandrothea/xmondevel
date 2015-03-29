@@ -19,7 +19,7 @@ public xdata::ActionListener,
 public toolbox::task::TimerListener {
 public:
   ClientBase(xdaq::ApplicationStub*);
-  ~ClientBase();
+  virtual ~ClientBase();
 
   // This method is used to auto-expire the hardware lease after a
   // given time.

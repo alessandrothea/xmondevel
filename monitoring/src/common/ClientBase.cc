@@ -14,6 +14,10 @@ ClientBase::ClientBase( xdaq::ApplicationStub *stub ) :
 
 }
 
+ClientBase::~ClientBase() {
+
+}
+
 void ClientBase::timeExpired(toolbox::task::TimerEvent& event) {
   LOG4CPLUS_DEBUG(getApplicationLogger(), "timeExpired, event: "+event.type());
 }
