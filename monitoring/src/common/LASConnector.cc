@@ -43,7 +43,7 @@
 #include "xcept/tools.h"
 
 
-    namespace mon {
+    namespace monitoring {
 
         const std::string LASConnector::stdPrefix = "urn:xdaq-flashlist:";
         const std::string LASConnector::serviceName = "xmaslas2g";
@@ -122,7 +122,6 @@
 
             std::map< std::string, std::string>::iterator it;
             for( it = filters.begin(); it != filters.end(); ++it ) {
-                //            if ( it->second.empty() ) continue;
                 filter += '&'+it->first+'='+it->second;
             }
 
@@ -151,38 +150,153 @@
             return url;
         }
 
+        // //______________________________________________________________________________
+        // std::vector<char> LASConnector::collectData2g( std::string url ) {
+        //     std::vector<char> data;
+
+        //     //        std::cout << "flasshlist url = " << url<< std::endl;
+        //     CURL* cc=curl_easy_init();
+        //     curl_easy_setopt(cc,CURLOPT_URL,url.c_str());
+
+        //     if (userpwd_.length()>1) curl_easy_setopt(cc,CURLOPT_USERPWD,userpwd_.c_str());
+            
+        //     curl_easy_setopt(cc,CURLOPT_WRITEFUNCTION,LASConnector::fileWriter);
+            
+        //     curl_easy_setopt(cc,CURLOPT_WRITEDATA,&data);
+
+        //     curl_easy_perform(cc);
+
+        //     curl_easy_cleanup(cc);    
+        //     return data; 
+        // }
+
         //______________________________________________________________________________
         std::vector<char> LASConnector::collectData( std::string url ) {
             std::vector<char> data;
 
-            //        std::cout << "flasshlist url = " << url<< std::endl;
-            CURL* cc=curl_easy_init();
-            curl_easy_setopt(cc,CURLOPT_URL,url.c_str());
-            if (userpwd_.length()>1) curl_easy_setopt(cc,CURLOPT_USERPWD,userpwd_.c_str());
-            curl_easy_setopt(cc,CURLOPT_WRITEFUNCTION,LASConnector::readLASFunc);
-            curl_easy_setopt(cc,CURLOPT_WRITEDATA,&data);
+            long timeout_(4);
 
-            curl_easy_perform(cc);
+           CURL* curl_handle ( 0 );
+           CURLcode code;
+           // struct MemoryStruct chunk;
+           // chunk.memory=0;
+           // chunk.size = 0;
+           //init the curl session
+           curl_handle = curl_easy_init();
+           //Error Buffer
+           char errorBuffer[CURL_ERROR_SIZE];
+           code = curl_easy_setopt ( curl_handle, CURLOPT_ERRORBUFFER, errorBuffer );
+         
+           if ( code != CURLE_OK )
+           {
+             std::ostringstream msg;
+             msg << "Failed to set error buffer (code " << code << ")." << errorBuffer;
+             XCEPT_RAISE ( xcept::Exception,msg.str() );
+           }
+         
+           //specify URL to get
+           // url_ = string2cstr ( url );
+           code = curl_easy_setopt ( curl_handle, CURLOPT_URL, url.c_str() );
+         
+           if ( code != CURLE_OK )
+           {
+             std::ostringstream msg;
+             msg << "Failed to specify URL (code " << code << ")." << errorBuffer;
+             XCEPT_RAISE ( xcept::Exception,msg.str() );
+           }
+         
+           //send all data to this function
+           code = curl_easy_setopt ( curl_handle, CURLOPT_WRITEFUNCTION, fileWriter );
+         
+           if ( code != CURLE_OK )
+           {
+             std::ostringstream msg;
+             msg << "Failed to specify Handler (code " << code << ")." << errorBuffer;
+             XCEPT_RAISE ( xcept::Exception,msg.str() );
+           }
+         
+           //we pass our 'chunk' struct to the callback function
+           code = curl_easy_setopt ( curl_handle, CURLOPT_WRITEDATA, ( void* ) &data );
+         
+           if ( code != CURLE_OK )
+           {
+             std::ostringstream msg;
+             msg << "Failed to specify buffer (code " << code << ")." << errorBuffer;
+             XCEPT_RAISE ( xcept::Exception,msg.str() );
+           }
+         
+           //some servers don't like requests that are made without a user-agent field, so we provide one
+           code = curl_easy_setopt ( curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0" );
+         
+           if ( code != CURLE_OK )
+           {
+             std::ostringstream msg;
+             msg << "Failed to user-agent libcurl-agent/1.0 (code " << code << ")." << errorBuffer;
+             XCEPT_RAISE ( xcept::Exception,msg.str() );
+           }
+         
+           code = curl_easy_setopt ( curl_handle, CURLOPT_TIMEOUT, timeout_ );
+         
+           if ( code != CURLE_OK )
+           {
+             std::ostringstream msg;
+             msg << "Failed to set write data " << errorBuffer;
+             XCEPT_RAISE ( xcept::Exception,msg.str() );
+           }
+         
+           unsigned long nosignal ( 0 );
+           code = curl_easy_setopt ( curl_handle, CURLOPT_NOSIGNAL, nosignal );
+         
+           if ( code != CURLE_OK )
+           {
+             std::ostringstream msg;
+             msg << "Failed to set write data " << errorBuffer;
+             XCEPT_RAISE ( xcept::Exception,msg.str() );
+           }
+         
+           //get it!
+           code = curl_easy_perform ( curl_handle );
+         
+           if ( code != CURLE_OK )
+           {
+             std::ostringstream msg;
+             msg << "Failed HTTP request to URL '" << url << "' error found (errno =" << code << "): " << errorBuffer << ".";
+             XCEPT_RAISE ( xcept::Exception,msg.str() );
+           }
+         
+           //cleanup curl stuff
+           curl_easy_cleanup ( curl_handle );
 
-            curl_easy_cleanup(cc);    
-            return data; 
+           return data;
         }
 
         //______________________________________________________________________________
-        size_t LASConnector::readLASFunc(void* ptr, size_t sizei, size_t nmemb, void* str) {
-            std::vector<char>* buffer=(std::vector<char>*)(str);
-            if (sizei==1) {
-                char* work=(char*)ptr;
-                buffer->insert(buffer->end(),work,work+nmemb);
-            }
-            return sizei*nmemb;
+        // size_t LASConnector::readLASFunc(void* ptr, size_t sizei, size_t nmemb, void* str) {
+        //     std::vector<char>* buffer=(std::vector<char>*)(str);
+        //     if (sizei==1) {
+        //         char* work=(char*)ptr;
+        //         buffer->insert(buffer->end(),work,work+nmemb);
+        //     }
+        //     return sizei*nmemb;
+        // }
+
+        //______________________________________________________________________________
+        size_t LASConnector::fileWriter(void* ptr, size_t size, size_t nmemb, void* data) {
+            size_t realsize = size * nmemb;
+
+            std::vector<char>* buffer=(std::vector<char>*)(data);
+            char* work=(char*)ptr;
+            buffer->insert(buffer->end(),work,work+realsize);
+            return realsize;
         }
 
         //______________________________________________________________________________
-        void LASConnector::parseResponseExdr(const std::vector<char>& data, xdata::Table &t) {
+        void LASConnector::parseResponseExdr(const std::vector<char>& data, xdata::Table &table) {
+
+            table.clear();
             xdata::exdr::Serializer serializer_;
 
-            xdata::Table table;
+            // xdata::Table table;
             xdata::exdr::FixedSizeInputStreamBuffer  inBuffer((char*)(&(data[0])), data.size());
 
             try {
@@ -194,7 +308,10 @@
                 return;
             }
 
-            t = table;
+            std::stringstream ss;
+            ss << "Table successufully imported from exdr format (rows " << table.getRowCount() << ")";
+            LOG4CPLUS_INFO(logger_, ss.str());
+            // t = table;
         }
 
 }

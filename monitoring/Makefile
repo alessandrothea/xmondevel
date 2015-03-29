@@ -10,7 +10,10 @@ Sources=\
 	ClientBase.cc \
 	ClientUIBase.cc \
 	SimpleClient.cc \
-	LASConnector.cc
+	LASConnector.cc \
+	EsDCCClient.cc \
+	EsDCCClientUI.cc
+
 
 IncludeDirs = \
 	include\
@@ -23,7 +26,7 @@ UserCCFlags = -g
 DependentLibraryDirs = \
 	$(XDAQ_ROOT)/lib
 
-DependentLibraries = 
+DependentLibraries =
 
 DynamicLibrary= monitoring
 

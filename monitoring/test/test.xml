@@ -19,7 +19,23 @@
   <xc:Context url="http://outatime:1973">
         
     <!-- Declare a HelloWorld application -->
-    <xc:Application class="ClientBase" id="255" instance="0" network="local"/>
+    <xc:Application class="monitoring::EsDCCClient" id="105" instance="0" network="local" logpolicy="inherit">
+        <properties xmlns="urn:xdaq-application:monitoring::EsDCCClient" xsi:type="soapenc:Struct">
+            <updatePeriod xsi:type="xsd:string">PT2S</updatePeriod>
+            <!-- <lasURL xsi:type="xsd:string">pc-c2e11-10-01.cms:8845</lasURL> -->
+            <slashURL xsi:type="xsd:string">localhost:8845</slashURL>
+            <!-- <flashlists xsi:type="xsd:string">urn:xdaq-flashlist:hostInfo</flashlists> -->
+            <flashlists xsi:type="xsd:string">urn:xdaq-flashlist:esDCCStatus</flashlists>
+
+<!--             <tablesToAcquire xsi:type="xsd:string">status</tablesToAcquire>
+            <subscribeFlashlists xsi:type="xsd:string">urn:xdaq-flashlist:esDCCStatus</subscribeFlashlists>
+            <subscribeGroups xsi:type="xsd:string">xmas</subscribeGroups>
+            <monitoringLinksPath xsi:type="xsd:string"> ${XDAQ_ROOT}/share/ecal/xtras/monitoringLinks.xml</monitoringLinksPath>
+            <startupFromLAS xsi:type="xsd:string">yes</startupFromLAS>
+            <lasURL xsi:type="xsd:string">pc-c2e11-10-01.cms:8845</lasURL>
+ -->
+        </properties>
+    </xc:Application>
         
     <!-- Shared object library that contains the HelloWorld inplementation -->      
     <xc:Module>${HOME}/Development/xdaqtest/xdevel/monitoring/lib/linux/x86_64_slc6/libmonitoring.so</xc:Module>

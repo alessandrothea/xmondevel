@@ -25,7 +25,7 @@
 #include "log4cplus/logger.h"
 
 
-namespace mon {
+namespace monitoring {
 
 class LASConnector {
     public:
@@ -39,6 +39,8 @@ class LASConnector {
     protected:
         void parseResponseExdr(const std::vector<char>& data, xdata::Table& t);
         std::vector<char> collectData( std::string url );
+        // std::vector<char> collectData2g( std::string url );
+
         std::string getFlashListURL( const std::string& listName );
         std::string getFlashListURL( const std::string& listName, std::map< std::string, std::string> filters );
         std::string getCatalogURL();
@@ -47,7 +49,7 @@ class LASConnector {
         std::string tableUrl_;
         log4cplus::Logger logger_;
 
-        static size_t readLASFunc(void* ptr, size_t sizei, size_t nmemb, void* str);
+        static size_t fileWriter(void* ptr, size_t sizei, size_t nmemb, void* str);
 
         static const std::string stdPrefix;
         static const std::string serviceName;
