@@ -1,4 +1,4 @@
-#include "monitoring/Client.hh"
+#include "monitoring/SimpleClient.hh"
 
 #include "xdaq/ApplicationStub.h"
 
