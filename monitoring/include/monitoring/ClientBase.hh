@@ -18,6 +18,9 @@ public xdaq::Application,
 public xdata::ActionListener,
 public toolbox::task::TimerListener {
 public:
+
+  XDAQ_INSTANTIATOR();
+
   ClientBase(xdaq::ApplicationStub*);
   virtual ~ClientBase();
 

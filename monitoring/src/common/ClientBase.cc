@@ -6,6 +6,9 @@
 
 #include "log4cplus/loggingmacros.h"
 
+
+XDAQ_INSTANTIATOR_IMPL(monitoring::ClientBase)
+
 namespace monitoring {
 
 ClientBase::ClientBase( xdaq::ApplicationStub *stub ) :
