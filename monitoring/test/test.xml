@@ -14,4 +14,16 @@
 
   </xc:Context>
 
+
+  <!-- Declare a context that contain applcation -->
+  <xc:Context url="http://outatime:1973">
+        
+    <!-- Declare a HelloWorld application -->
+    <xc:Application class="ClientBase" id="255" instance="0" network="local"/>
+        
+    <!-- Shared object library that contains the HelloWorld inplementation -->      
+    <xc:Module>${HOME}/Development/xdaqtest/xdevel/monitoring/lib/linux/x86_64_slc6/libmonitoring.so</xc:Module>
+
+  </xc:Context>
+
 </xc:Partition>
