@@ -1,5 +1,6 @@
-#include "monitoring/ClientLayout.hh"
+#include "monitoring/Layout.hh"
 
+#include "xdaq/Application.h"
 namespace monitoring {
 
 
@@ -7,7 +8,7 @@ Layout::Layout( xdaq::Application* app ) {
   // 
   std::stringstream callback;
   callback << app->getApplicationDescriptor()->getContextDescriptor()->getURL();
-  callback << "/" << app->getApplicationDescriptor()->getURN() << "/updateData";
+  callback << "/" << app->getApplicationDescriptor()->getURN() << "/getUpdatedValues";
 
   callback_ = callback.str();
 
@@ -70,7 +71,7 @@ Layout::getHTMLHeader(xgi::framework::UIManager* manager, xgi::Input* in, xgi::O
   "          return;\n"
   "      }\n"
   "\n"
-  "      $('#result').html('The counter is now: ' + data['counterA'])\n"
+  // "      $('#result').html('The counter is now: ' + data['counterA'])\n"
   "\n"      
   "      for ( var key in data ) {\n"
   "         $('#'+key).html(data[key]);\n"

@@ -12,7 +12,8 @@ Sources=\
 	SimpleClient.cc \
 	LASConnector.cc \
 	EsDCCClient.cc \
-	EsDCCClientUI.cc
+	EsDCCClientUI.cc \
+	Layout.cc
 
 
 IncludeDirs = \

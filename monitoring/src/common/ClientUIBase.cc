@@ -7,11 +7,14 @@
 namespace monitoring {
 ClientUIBase::ClientUIBase( ClientBase* client ) : 
  xgi::framework::UIManager(client),
- client_(client) {
+ client_(client),
+ layout_(client) {
 
   xgi::framework::deferredbind(client_, this,  &ClientUIBase::Default, "Default");
 
   xgi::deferredbind(client_, this, &ClientUIBase::getUpdatedValues, "getUpdatedValues");
+
+  setLayout(&layout_);
 }
 
 ClientUIBase::~ClientUIBase() {

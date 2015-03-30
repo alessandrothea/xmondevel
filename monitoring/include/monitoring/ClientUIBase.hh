@@ -24,6 +24,7 @@ public:
     C* getClient() { return dynamic_cast<C*>(client_); }
 private:
     ClientBase* client_;
+    Layout layout_;
 
 };
 

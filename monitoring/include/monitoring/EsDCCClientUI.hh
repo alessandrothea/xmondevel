@@ -14,6 +14,8 @@ public:
     ~EsDCCClientUI();
     
     void Default(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
+    
+    void getUpdatedValues(xgi::Input*, xgi::Output*) throw (xgi::exception::Exception);
 
 };
     
